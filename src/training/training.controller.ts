@@ -7,12 +7,14 @@ import {
   UseGuards,
   Request,
   Delete,
+  Put,
 } from '@nestjs/common';
 
 import { TrainingService } from './training.service';
 import { CreateTrainingDto } from './dto/create-tratining.dto';
 import { Training } from './schemas/training.schema';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UpdateTrainingDto } from './dto/update-training.dto';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -28,14 +30,31 @@ export class TrainingController {
 
   @Post()
   async create(
-    @Body() dto: CreateTrainingDto,
+    @Body() createDto: CreateTrainingDto,
     @Request() req: AuthenticatedRequest,
   ) {
+    console.log('POST /trainings called');
+
+    console.log('Request user:', req.user);
+
     const data: CreateTrainingDto & { userId: string } = {
-      ...dto,
+      ...createDto,
       userId: req.user.userId,
     };
     return this.trainingService.create(data);
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateDto: UpdateTrainingDto,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    const data = {
+      ...updateDto,
+      userId: req.user.userId,
+    };
+    return this.trainingService.update(id, data);
   }
 
   @Get()

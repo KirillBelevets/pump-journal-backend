@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Training } from './schemas/training.schema';
 import { CreateTrainingDto } from './dto/create-tratining.dto';
+import { UpdateTrainingDto } from './dto/update-training.dto';
 
 @Injectable()
 export class TrainingService {
@@ -11,6 +12,8 @@ export class TrainingService {
   ) {}
 
   async create(createTrainingDto: CreateTrainingDto): Promise<Training> {
+    console.log('DTO in service:', createTrainingDto);
+
     const newTraining = new this.trainingModel(createTrainingDto);
     return newTraining.save();
   }
@@ -29,5 +32,15 @@ export class TrainingService {
 
   async remove(id: string): Promise<void> {
     await this.trainingModel.findByIdAndDelete(id);
+  }
+
+  async update(id: string, updateDto: UpdateTrainingDto): Promise<Training> {
+    const training = await this.trainingModel.findByIdAndUpdate(id, updateDto, {
+      new: true,
+    });
+    if (!training) {
+      throw new NotFoundException('Training session not found');
+    }
+    return training;
   }
 }

@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import type { Express } from 'express';
-import { bootstrap } from '../dist/src/vercel.bootstrap';
+import { bootstrap } from 'vercel.bootstrap';
 
 let server: Express | undefined;
 

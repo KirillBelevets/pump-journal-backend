@@ -1,15 +1,16 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import type { Express } from 'express';
+import { bootstrap } from '../src/vercel.bootstrap';
 
-import { bootstrap } from 'src/vercel.bootstrap';
-
-const serverPromise: Promise<Express> = bootstrap();
+let server: Express | undefined;
 
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
 ): Promise<void> {
-  const app: Express = await serverPromise;
+  if (!server) {
+    server = await bootstrap();
+  }
 
-  app(req, res);
+  server(req, res);
 }

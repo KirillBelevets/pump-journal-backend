@@ -1,21 +1,15 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from '../src/app.module';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import * as express from 'express';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { Express } from 'express';
 
-const server = express();
+import { bootstrap } from 'src/vercel.bootstrap';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
-  app.enableCors({
-    origin: [
-      'http://localhost:3001',
-      'https://pump-journal-frontend.vercel.app',
-    ],
-    credentials: true,
-  });
-  await app.init();
+const serverPromise: Promise<Express> = bootstrap();
+
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse,
+): Promise<void> {
+  const app: Express = await serverPromise;
+
+  app(req, res);
 }
-bootstrap();
-
-export default server;

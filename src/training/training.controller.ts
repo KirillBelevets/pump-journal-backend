@@ -13,7 +13,7 @@ import {
 import { TrainingService } from './training.service';
 import { CreateTrainingDto } from './dto/create-tratining.dto';
 import { Training } from './schemas/training.schema';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateTrainingDto } from './dto/update-training.dto';
 
 interface AuthenticatedRequest extends Request {

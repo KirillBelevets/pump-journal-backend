@@ -9,12 +9,11 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-
 import { TrainingService } from './training.service';
 import { CreateTrainingDto } from './dto/create-tratining.dto';
-import { Training } from './schemas/training.schema';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateTrainingDto } from './dto/update-training.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Training } from './schemas/training.schema';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -33,15 +32,21 @@ export class TrainingController {
     @Body() createDto: CreateTrainingDto,
     @Request() req: AuthenticatedRequest,
   ) {
-    console.log('POST /trainings called');
-
-    console.log('Request user:', req.user);
-
-    const data: CreateTrainingDto & { userId: string } = {
-      ...createDto,
-      userId: req.user.userId,
-    };
+    const data = { ...createDto, userId: req.user.userId };
     return this.trainingService.create(data);
+  }
+
+  @Get()
+  async findAll(@Request() req: AuthenticatedRequest): Promise<Training[]> {
+    return this.trainingService.findAllForUser(req.user.userId);
+  }
+
+  @Get(':id')
+  async findOne(
+    @Param('id') id: string,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<Training> {
+    return this.trainingService.findOneForUser(id, req.user.userId);
   }
 
   @Put(':id')
@@ -50,26 +55,12 @@ export class TrainingController {
     @Body() updateDto: UpdateTrainingDto,
     @Request() req: AuthenticatedRequest,
   ) {
-    const data = {
-      ...updateDto,
-      userId: req.user.userId,
-    };
+    const data = { ...updateDto, userId: req.user.userId };
     return this.trainingService.update(id, data);
   }
 
-  @Get()
-  async findAll(): Promise<Training[]> {
-    return this.trainingService.findAll();
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Training> {
-    return this.trainingService.findOne(id);
-  }
-
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  async remove(@Param('id') id: string) {
-    return this.trainingService.remove(id);
+  async remove(@Param('id') id: string, @Request() req: AuthenticatedRequest) {
+    return this.trainingService.remove(id, req.user.userId);
   }
 }

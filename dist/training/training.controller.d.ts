@@ -1,7 +1,7 @@
 import { TrainingService } from './training.service';
 import { CreateTrainingDto } from './dto/create-tratining.dto';
-import { Training } from './schemas/training.schema';
 import { UpdateTrainingDto } from './dto/update-training.dto';
+import { Training } from './schemas/training.schema';
 interface AuthenticatedRequest extends Request {
     user: {
         userId: string;
@@ -12,9 +12,9 @@ export declare class TrainingController {
     private readonly trainingService;
     constructor(trainingService: TrainingService);
     create(createDto: CreateTrainingDto, req: AuthenticatedRequest): Promise<Training>;
+    findAll(req: AuthenticatedRequest): Promise<Training[]>;
+    findOne(id: string, req: AuthenticatedRequest): Promise<Training>;
     update(id: string, updateDto: UpdateTrainingDto, req: AuthenticatedRequest): Promise<Training>;
-    findAll(): Promise<Training[]>;
-    findOne(id: string): Promise<Training>;
-    remove(id: string): Promise<void>;
+    remove(id: string, req: AuthenticatedRequest): Promise<void>;
 }
 export {};

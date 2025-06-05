@@ -1,3 +1,4 @@
+// training.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -11,36 +12,50 @@ export class TrainingService {
     @InjectModel(Training.name) private trainingModel: Model<Training>,
   ) {}
 
-  async create(createTrainingDto: CreateTrainingDto): Promise<Training> {
-    console.log('DTO in service:', createTrainingDto);
-
+  async create(
+    createTrainingDto: CreateTrainingDto & { userId: string },
+  ): Promise<Training> {
     const newTraining = new this.trainingModel(createTrainingDto);
     return newTraining.save();
   }
 
-  async findAll(): Promise<Training[]> {
-    return this.trainingModel.find().sort({ date: -1 }).exec();
+  async findAllForUser(userId: string): Promise<Training[]> {
+    return this.trainingModel.find({ userId }).sort({ date: -1 }).exec();
   }
 
-  async findOne(id: string): Promise<Training> {
-    const training = await this.trainingModel.findById(id).exec();
+  async findOneForUser(id: string, userId: string): Promise<Training> {
+    const training = await this.trainingModel
+      .findOne({ _id: id, userId })
+      .exec();
     if (!training) {
-      throw new NotFoundException(`Training with id ${id} not found`);
+      throw new NotFoundException(`Training not found or unauthorized`);
     }
     return training;
   }
 
-  async remove(id: string): Promise<void> {
-    await this.trainingModel.findByIdAndDelete(id);
+  async remove(id: string, userId: string): Promise<void> {
+    const result = await this.trainingModel.findOneAndDelete({
+      _id: id,
+      userId,
+    });
+    if (!result) {
+      throw new NotFoundException('Training not found or unauthorized');
+    }
   }
 
-  async update(id: string, updateDto: UpdateTrainingDto): Promise<Training> {
-    const training = await this.trainingModel.findByIdAndUpdate(id, updateDto, {
-      new: true,
+  async update(
+    id: string,
+    updateDto: UpdateTrainingDto & { userId: string },
+  ): Promise<Training> {
+    const training = await this.trainingModel.findOne({
+      _id: id,
+      userId: updateDto.userId,
     });
     if (!training) {
-      throw new NotFoundException('Training session not found');
+      throw new NotFoundException('Training not found or unauthorized');
     }
-    return training;
+
+    Object.assign(training, updateDto);
+    return training.save();
   }
 }

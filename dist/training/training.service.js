@@ -23,31 +23,40 @@ let TrainingService = class TrainingService {
         this.trainingModel = trainingModel;
     }
     async create(createTrainingDto) {
-        console.log('DTO in service:', createTrainingDto);
         const newTraining = new this.trainingModel(createTrainingDto);
         return newTraining.save();
     }
-    async findAll() {
-        return this.trainingModel.find().sort({ date: -1 }).exec();
+    async findAllForUser(userId) {
+        return this.trainingModel.find({ userId }).sort({ date: -1 }).exec();
     }
-    async findOne(id) {
-        const training = await this.trainingModel.findById(id).exec();
+    async findOneForUser(id, userId) {
+        const training = await this.trainingModel
+            .findOne({ _id: id, userId })
+            .exec();
         if (!training) {
-            throw new common_1.NotFoundException(`Training with id ${id} not found`);
+            throw new common_1.NotFoundException(`Training not found or unauthorized`);
         }
         return training;
     }
-    async remove(id) {
-        await this.trainingModel.findByIdAndDelete(id);
+    async remove(id, userId) {
+        const result = await this.trainingModel.findOneAndDelete({
+            _id: id,
+            userId,
+        });
+        if (!result) {
+            throw new common_1.NotFoundException('Training not found or unauthorized');
+        }
     }
     async update(id, updateDto) {
-        const training = await this.trainingModel.findByIdAndUpdate(id, updateDto, {
-            new: true,
+        const training = await this.trainingModel.findOne({
+            _id: id,
+            userId: updateDto.userId,
         });
         if (!training) {
-            throw new common_1.NotFoundException('Training session not found');
+            throw new common_1.NotFoundException('Training not found or unauthorized');
         }
-        return training;
+        Object.assign(training, updateDto);
+        return training.save();
     }
 };
 exports.TrainingService = TrainingService;

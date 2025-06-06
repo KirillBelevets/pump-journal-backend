@@ -109,7 +109,10 @@ let AuthController = class AuthController {
             email: user.email,
         };
         const token = await this.authService.generateResetToken(payload);
-        const resetUrl = `${this.configService.get('FRONTEND_URL')}/auth/reset-password?token=${token}`;
+        const frontendUrl = this.configService.get('NODE_ENV') === 'production'
+            ? (this.configService.get('FRONTEND_PROD_URL') ?? '')
+            : (this.configService.get('FRONTEND_URL') ?? '');
+        const resetUrl = `${frontendUrl}/auth/reset-password?token=${token}`;
         return { message: 'Reset link generated.', resetUrl };
     }
     async resetPassword(dto) {

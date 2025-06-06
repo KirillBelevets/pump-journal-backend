@@ -10,7 +10,6 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -18,7 +17,6 @@ import { AppService } from './app.service';
         uri: config.get<string>('MONGODB_URI', { infer: true }),
       }),
     }),
-
     AuthModule,
     UserModule,
     TrainingModule,

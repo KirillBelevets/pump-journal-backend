@@ -9,25 +9,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserSchema = exports.User = void 0;
-const mongoose_1 = require("@nestjs/mongoose");
-const mongoose_2 = require("mongoose");
-let User = class User extends mongoose_2.Document {
-    email;
-    password;
-};
-exports.User = User;
+exports.ChangePasswordDto = void 0;
+const class_validator_1 = require("class-validator");
+class ChangePasswordDto {
+    oldPassword;
+    newPassword;
+}
+exports.ChangePasswordDto = ChangePasswordDto;
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, unique: true }),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], User.prototype, "email", void 0);
+], ChangePasswordDto.prototype, "oldPassword", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: String, required: true, select: false }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(8),
     __metadata("design:type", String)
-], User.prototype, "password", void 0);
-exports.User = User = __decorate([
-    (0, mongoose_1.Schema)(),
-    (0, mongoose_1.Schema)()
-], User);
-exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);
-//# sourceMappingURL=user.schema.js.map
+], ChangePasswordDto.prototype, "newPassword", void 0);
+//# sourceMappingURL=change-password.dto.js.map

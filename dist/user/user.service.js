@@ -22,8 +22,16 @@ let UserService = class UserService {
     constructor(userModel) {
         this.userModel = userModel;
     }
+    async findByIdWithPassword(id) {
+        return this.userModel.findById(id).select('+password').exec();
+    }
     async findByEmail(email) {
-        return this.userModel.findOne({ email }).exec();
+        const user = await this.userModel
+            .findOne({ email: email.toLowerCase().trim() })
+            .select('+password _id email')
+            .exec();
+        console.log('🔎 Fetched user from DB:', user);
+        return user;
     }
     async create(email, password) {
         const createdUser = new this.userModel({ email, password });

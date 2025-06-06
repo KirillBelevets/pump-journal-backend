@@ -7,8 +7,19 @@ import { User } from './schemas/user.schema';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
+  async findByIdWithPassword(id: string): Promise<User | null> {
+    return this.userModel.findById(id).select('+password').exec();
+  }
+
   async findByEmail(email: string): Promise<User | null> {
-    return this.userModel.findOne({ email }).exec();
+    const user = await this.userModel
+      .findOne({ email: email.toLowerCase().trim() })
+      .select('+password _id email')
+      .exec();
+
+    console.log('🔎 Fetched user from DB:', user);
+
+    return user;
   }
 
   async create(email: string, password: string): Promise<User> {

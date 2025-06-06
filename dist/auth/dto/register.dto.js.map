@@ -1,1 +1,1 @@
-{"version":3,"file":"register.dto.js","sourceRoot":"","sources":["../../../auth/dto/register.dto.ts"],"names":[],"mappings":";;;AAAA,MAAa,WAAW;IACtB,KAAK,CAAS;IACd,QAAQ,CAAS;CAClB;AAHD,kCAGC"}
+{"version":3,"file":"register.dto.js","sourceRoot":"","sources":["../../../auth/dto/register.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,qDAAsD;AAEtD,MAAa,WAAW;IAEtB,KAAK,CAAS;IAId,QAAQ,CAAS;CAClB;AAPD,kCAOC;AALC;IADC,IAAA,0BAAQ,GAAE;;0CACG;AAId;IAFC,IAAA,0BAAQ,GAAE;IACV,IAAA,2BAAS,EAAC,CAAC,CAAC;;6CACI"}

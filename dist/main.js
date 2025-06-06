@@ -14,7 +14,7 @@ async function bootstrap() {
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         allowedHeaders: 'Content-Type,Authorization',
     });
-    app.useGlobalPipes(new common_1.ValidationPipe());
+    app.useGlobalPipes(new common_1.ValidationPipe({ whitelist: true }));
     await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

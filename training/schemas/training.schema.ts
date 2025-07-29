@@ -29,6 +29,9 @@ export class Exercise {
 
   @Prop({ type: [SetSchema], required: true })
   sets: Set[];
+
+  @Prop()
+  comment?: string;
 }
 export const ExerciseSchema = SchemaFactory.createForClass(Exercise);
 

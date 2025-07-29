@@ -39,6 +39,7 @@ let Exercise = class Exercise {
     rest;
     tempo;
     sets;
+    comment;
 };
 exports.Exercise = Exercise;
 __decorate([
@@ -57,6 +58,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: [exports.SetSchema], required: true }),
     __metadata("design:type", Array)
 ], Exercise.prototype, "sets", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Exercise.prototype, "comment", void 0);
 exports.Exercise = Exercise = __decorate([
     (0, mongoose_1.Schema)({ _id: false })
 ], Exercise);

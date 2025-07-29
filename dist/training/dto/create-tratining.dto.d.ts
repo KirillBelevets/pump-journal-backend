@@ -8,6 +8,7 @@ export declare class ExerciseDto {
     tempo: string;
     rest: number;
     sets: SetDto[];
+    comment?: string;
 }
 export declare class CreateTrainingDto {
     readonly userId: string;

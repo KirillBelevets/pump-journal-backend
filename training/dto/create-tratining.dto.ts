@@ -38,6 +38,10 @@ export class ExerciseDto {
   @ValidateNested({ each: true })
   @Type(() => SetDto)
   sets: SetDto[];
+
+  @IsOptional()
+  @IsString()
+  comment?: string;
 }
 
 export class CreateTrainingDto {

@@ -38,6 +38,7 @@ class ExerciseDto {
     tempo;
     rest;
     sets;
+    comment;
 }
 exports.ExerciseDto = ExerciseDto;
 __decorate([
@@ -59,6 +60,11 @@ __decorate([
     (0, class_transformer_1.Type)(() => SetDto),
     __metadata("design:type", Array)
 ], ExerciseDto.prototype, "sets", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ExerciseDto.prototype, "comment", void 0);
 class CreateTrainingDto {
     userId;
     date;

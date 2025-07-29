@@ -18,6 +18,7 @@ export declare class Exercise {
     rest: number;
     tempo: string;
     sets: Set[];
+    comment?: string;
 }
 export declare const ExerciseSchema: import("mongoose").Schema<Exercise, import("mongoose").Model<Exercise, any, any, any, Document<unknown, any, Exercise, any> & Exercise & {
     _id: import("mongoose").Types.ObjectId;
